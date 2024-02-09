@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculatrice</title>
+    <style>
+        .calculator {
+            width: 250px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            margin: 0 auto;
+            background-color: #f5f5f5;
+        }
+
+        .calculator input[type="text"] {
+            width: 100%;
+            margin-bottom: 10px;
+            padding: 5px;
+            font-size: 18px;
+        }
+        .calculator input[type="button"] {
+            width: 30%;
+            padding: 10px;
+            margin-right: 5px;
+            margin-bottom: 5px;
+            float: left;
+            font-size: 16px;
+            border-radius: 3px;
+            border: none;
+            cursor: pointer;
+        }
+        .calculator input[type="button"].operator {
+            background-color: #ff9800;
+            color: #fff;
+        }
+        .calculator input[type="button"].clear {
+            background-color: #e91e63;
+            color: #fff;
+        }
+        .calculator input[type="button"].equals {
+            background-color: #2196f3;
+            color: #fff;
+        }
+        .calculator input[type="button"].parentheses {
+            background-color: #4caf50;
+            color: #fff;
+        }
+	.calculator input[type="button"].special {
+            background-color: #ff96fc;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+<div>
+Utilisez la touche "C" pour effacer l'affichage.
+<hr>
+</div>
+    <div class="calculator">
+        <input type="text" id="display" readonly>
+        <input type="button" value="(" class="parentheses" onclick="appendToDisplay('(')">
+        <input type="button" value=")" class="parentheses" onclick="appendToDisplay(')')">
+	<input type="button" value="C" class="clear" onclick="clearDisplay()">
+	
+
+	<input type="button" value="1" onclick="appendToDisplay('0')">
+        <input type="button" value="2" onclick="appendToDisplay('1')">
+        <input type="button" value="3" onclick="appendToDisplay('2')">
+        <input type="button" value="4" onclick="appendToDisplay('4')">
+        <input type="button" value="5" onclick="appendToDisplay('5')">
+        <input type="button" value="6" onclick="appendToDisplay('6')">
+        <input type="button" value="7" onclick="appendToDisplay('7')">
+        <input type="button" value="8" onclick="appendToDisplay('8')">
+        <input type="button" value="9" onclick="appendToDisplay('9')">
+
+	<input type="button" value="+" class="operator" onclick="appendToDisplay('+')">
+	<input type="button" value="." onclick="appendToDisplay('.')">
+        <input type="button" value="-" class="operator" onclick="clearDisplay()">
+
+        <input type="button" value="*" class="operator" onclick="appendToDisplay('*')">
+    	<input type="button" value="pi" class="special" onclick="appendToDisplay('3,14')">
+        <input type="button" value="/" class="operator" onclick="appendToDisplay('/')">
+
+        <input type="button" value="cos" class="operator" onclick="appendFunction('cos')">
+        <input type="button" value="sin" class="operator" onclick="appendFunction('sin')">
+        <input type="button" value="tan" class="operator" onclick="appendFunction('tan')">
+
+	<input type="button" value="√" class="operator" onclick="appendFunction('sqrt')">
+        <input type="button" value="exp" class="operator" onclick="appendFunction('exp')">
+        <input type="button" value="=" class="equals" onclick="calculate()">
+        
+    </div>
+
+    <script>
+        function appendToDisplay(value) {
+            document.getElementById('display').value += value;
+        }
+
+        function appendFunction(func) {
+            document.getElementById('display').value += func + '(';
+        }
+
+        function clearDisplay() {
+            document.getElementById('display').value = '';
+        }
+
+	document.addEventListener("keydown", function(event) { // Pour vider le display quand "C" majuscule !!!
+	    if (event.key === "Delete" || event.key === "C") {
+		learDisplay();
+	    }
+	});
+
+        function calculate() {
+            try {
+                var expression = document.getElementById('display').value;
+                expression = expression.replace('cos', 'Math.cos');
+                expression = expression.replace('sin', 'Math.sin');
+                expression = expression.replace('tng', 'Math.tan');
+		expression = expression.replace('sqrt', 'Math.sqrt');
+		expression = expression.replace('exp', '2**');
+                var result = eval(expression);
+                if (isNaN(result) || !isFinite(result)) {
+                    throw "Invalid expression";
+                }
+                document.getElementById('display').value = result;
+            } catch (error) {
+                document.getElementById('display').value = 'Error';
+            }
+        }
+    </script>
+</body>
+</html>
